@@ -1,11 +1,12 @@
 {
   "name": "stamp-ai-dashboard",
   "version": "1.0.0",
-  "description": "Fastify API scaffold with common folder structure",
-  "main": "src/server.js",
+  "description": "Fastify TypeScript API scaffold with common folder structure",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "node --test"
+    "start": "tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "node --import tsx --test test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,10 @@
   "homepage": "https://github.com/Brunoa94/stamp-ai-dashboard#readme",
   "dependencies": {
     "fastify": "^5.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   }
 }

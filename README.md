@@ -1,12 +1,18 @@
 # stamp-ai-dashboard
 
-Fastify API scaffold using a common folder structure.
+Fastify API scaffold in TypeScript using a common folder structure.
 
 ## Run
 
 ```bash
 npm install
 npm start
+```
+
+## Build
+
+```bash
+npm run build
 ```
 
 ## Test
@@ -28,4 +34,4 @@ npm test
 - `src/utils/`: shared helpers
 - `test/`: automated tests
 
-Each folder includes a `WHEN_TO.md` file that explains what files should live there.
+Each folder includes a `WHEN_TO.md` file with expected file usage and code examples.

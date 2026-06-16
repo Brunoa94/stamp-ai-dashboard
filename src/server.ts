@@ -1,5 +1,5 @@
-const { buildApp } = require('./app');
-const { env } = require('./config/env');
+import { buildApp } from './app';
+import { env } from './config/env';
 
 async function start() {
   const app = buildApp();
@@ -12,4 +12,4 @@ async function start() {
   }
 }
 
-start();
+void start();

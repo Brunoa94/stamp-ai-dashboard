@@ -1,4 +1,6 @@
-module.exports = {
+import { FastifySchema } from 'fastify';
+
+const healthSchema: FastifySchema = {
   response: {
     200: {
       type: 'object',
@@ -9,3 +11,5 @@ module.exports = {
     },
   },
 };
+
+export default healthSchema;

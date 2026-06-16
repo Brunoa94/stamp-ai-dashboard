@@ -1,6 +1,6 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const { buildApp } = require('../src/app');
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { buildApp } from '../src/app';
 
 test('GET /api/health returns app status', async () => {
   const app = buildApp();
