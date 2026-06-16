@@ -1,0 +1,25 @@
+{
+  "name": "stamp-ai-dashboard",
+  "version": "1.0.0",
+  "description": "Fastify API scaffold with common folder structure",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brunoa94/stamp-ai-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Brunoa94/stamp-ai-dashboard/issues"
+  },
+  "homepage": "https://github.com/Brunoa94/stamp-ai-dashboard#readme",
+  "dependencies": {
+    "fastify": "^5.8.5"
+  }
+}
