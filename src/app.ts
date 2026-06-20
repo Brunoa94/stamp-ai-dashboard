@@ -1,10 +1,16 @@
-import Fastify from 'fastify';
-import registerRoutes from './routes';
+import Fastify from "fastify";
+import fastifyPostgres from "fastify-postgres";
+import registerRoutes from "./routes/index.js";
+import { env } from "./config/env.js";
 
 export function buildApp() {
   const app = Fastify({ logger: true });
 
-  app.register(registerRoutes, { prefix: '/api' });
+  app.register(fastifyPostgres.default, {
+    connectionString: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_SERVICE}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
+  });
+
+  app.register(registerRoutes, { prefix: "/api" });
 
   return app;
 }

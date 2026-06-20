@@ -1,5 +1,5 @@
-import { InvoiceType } from "../types/invoices";
-import { GlobalResponseType } from "../types/shared";
+import { InvoiceType } from "../types/invoices.js";
+import { GlobalResponseType } from "../types/shared.js";
 
 function getAllInvoices(): GlobalResponseType<InvoiceType> {
   return { status: 200, body: { title: "Test invoice", amount: 200 } };
