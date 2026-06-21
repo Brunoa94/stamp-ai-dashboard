@@ -1,10 +1,26 @@
-import { InvoiceType } from "../types/invoices.js";
-import { GlobalResponseType } from "../types/shared.js";
+import { CreateInvoiceType, InvoiceType } from "../types/invoices.js";
 
-function getAllInvoices(): GlobalResponseType<InvoiceType> {
-  return { status: 200, body: { title: "Test invoice", amount: 200 } };
+function getAllInvoices(): InvoiceType {
+  return {
+    title: "Test invoice",
+    amount: 200,
+    created_at: new Date(),
+    updated_at: new Date(),
+    id: "",
+  };
+}
+
+function createInvoice(body: CreateInvoiceType): InvoiceType {
+  return {
+    title: body.title,
+    amount: body.amount,
+    created_at: new Date(),
+    updated_at: new Date(),
+    id: "",
+  };
 }
 
 export const InvoicesService = {
   getAllInvoices,
+  createInvoice,
 };

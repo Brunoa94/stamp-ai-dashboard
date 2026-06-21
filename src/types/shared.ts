@@ -11,7 +11,11 @@ export type ErrorType = {
   };
 };
 
-export type GlobalResponseType<T> = {
-  status: ResponseCodeType;
-  body: T;
+export type FastifyBody<T> = {
+  Body: T;
+};
+
+export type FastifyBodyResponse<T> = {
+  status: number;
+  Body: T;
 };

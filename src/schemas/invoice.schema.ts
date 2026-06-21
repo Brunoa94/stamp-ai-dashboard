@@ -1,11 +1,14 @@
-import { FastifySchema } from "fastify";
-import { InvoiceSchema } from "../types/invoices";
-import zodToJsonSchema from "zod-to-json-schema";
+import { InvoiceSchema, CreateInvoiceSchema } from "../types/invoices.js";
 
-const getAllInvoicesSchema: FastifySchema = {
+export const getAllInvoicesSchema = {
   response: {
-    200: { body: zodToJsonSchema(InvoiceSchema) },
+    200: InvoiceSchema,
   },
 };
 
-export default getAllInvoicesSchema;
+export const createInvoiceSchema = {
+  body: CreateInvoiceSchema,
+  response: {
+    200: InvoiceSchema,
+  },
+};
