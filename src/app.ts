@@ -4,7 +4,8 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
-import registerRoutes from "./routes/index.js";
+import healthRoutes from "./routes/health.js";
+import invoiceRoutes from "./routes/invoices.js";
 import { env } from "./config/env.js";
 
 export function buildApp() {
@@ -23,7 +24,8 @@ export function buildApp() {
     connectionString: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_SERVICE}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
   });
 
-  app.register(registerRoutes, { prefix: "/api" });
+  app.register(healthRoutes, { prefix: "/api/health" });
+  app.register(invoiceRoutes, { prefix: "/api/invoice" });
 
   return app;
 }

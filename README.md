@@ -9,6 +9,8 @@ npm install
 npm start
 ```
 
+`npm start` runs the API in watch mode and restarts on file save.
+
 ## Build
 
 ```bash

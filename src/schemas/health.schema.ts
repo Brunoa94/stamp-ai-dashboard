@@ -1,14 +1,12 @@
-import { FastifySchema } from 'fastify';
+import { z } from "zod";
 
-const healthSchema: FastifySchema = {
+const HealthResponseSchema = z.object({
+  status: z.string(),
+});
+
+const healthSchema = {
   response: {
-    200: {
-      type: 'object',
-      properties: {
-        status: { type: 'string' },
-      },
-      required: ['status'],
-    },
+    200: HealthResponseSchema,
   },
 };
 
