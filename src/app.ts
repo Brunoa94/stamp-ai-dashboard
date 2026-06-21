@@ -7,6 +7,7 @@ import {
 import healthRoutes from "./routes/health.js";
 import invoiceRoutes from "./routes/invoices.js";
 import { env } from "./config/env.js";
+import { ErrorType } from "./types/shared.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -22,6 +23,12 @@ export function buildApp() {
 
   app.register(fastifyPostgres.default, {
     connectionString: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_SERVICE}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
+  });
+
+  app.setErrorHandler((err: ErrorType, _req, reply) => {
+    app.log.error(err);
+    const status = err.status ? err.status || 500 : 400;
+    reply.code(status).send(err.error);
   });
 
   app.register(healthRoutes, { prefix: "/api/health" });
