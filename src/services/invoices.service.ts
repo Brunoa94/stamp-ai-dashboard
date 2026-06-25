@@ -1,3 +1,4 @@
+import { InvoiceMapper } from "../mappers/invoice.mapper.js";
 import { CreateInvoiceType, InvoiceType } from "../types/invoices.js";
 import { ErrorType } from "../types/shared.js";
 
@@ -21,13 +22,7 @@ function createInvoice(body: CreateInvoiceType): InvoiceType {
   // };
   // throw error;
 
-  return {
-    title: body.title,
-    amount: body.amount,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    id: "",
-  };
+  return InvoiceMapper.createInvoiceMapper(body);
 }
 
 export const InvoicesService = {
