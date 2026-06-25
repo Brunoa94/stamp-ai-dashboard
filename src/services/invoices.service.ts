@@ -5,27 +5,27 @@ function getAllInvoices(): InvoiceType {
   return {
     title: "Test invoice",
     amount: 200,
-    created_at: new Date(),
-    updated_at: new Date(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     id: "",
   };
 }
 
 function createInvoice(body: CreateInvoiceType): InvoiceType {
-  const error: ErrorType = {
-    status: 500,
-    error: {
-      id: "SOMETHING_WENT_WRONG",
-      message: "Testi",
-    },
-  };
-  throw error;
+  // const error: ErrorType = {
+  //   status: 500,
+  //   error: {
+  //     id: "SOMETHING_WENT_WRONG",
+  //     message: "Testi",
+  //   },
+  // };
+  // throw error;
 
   return {
     title: body.title,
     amount: body.amount,
-    created_at: new Date(),
-    updated_at: new Date(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     id: "",
   };
 }

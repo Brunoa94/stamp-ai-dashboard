@@ -1,9 +1,6 @@
 import Fastify from "fastify";
 import fastifyPostgres from "fastify-postgres";
-import {
-  serializerCompiler,
-  validatorCompiler,
-} from "fastify-type-provider-zod";
+import { TypeBoxValidatorCompiler } from "@fastify/type-provider-typebox";
 import healthRoutes from "./routes/health.js";
 import invoiceRoutes from "./routes/invoices.js";
 import { env } from "./config/env.js";
@@ -18,8 +15,7 @@ export function buildApp() {
     },
   });
 
-  app.setValidatorCompiler(validatorCompiler);
-  app.setSerializerCompiler(serializerCompiler);
+  app.setValidatorCompiler(TypeBoxValidatorCompiler);
 
   app.register(fastifyPostgres.default, {
     connectionString: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_SERVICE}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,

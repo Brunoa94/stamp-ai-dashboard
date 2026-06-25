@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { Type } from "@fastify/type-provider-typebox";
 
-const HealthResponseSchema = z.object({
-  status: z.string(),
+const HealthResponseSchema = Type.Object({
+  status: Type.String(),
 });
 
 const healthSchema = {

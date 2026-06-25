@@ -1,17 +1,8 @@
-import { z } from "zod";
+import { Static } from "@fastify/type-provider-typebox";
+import {
+  CreateInvoiceSchema,
+  InvoiceSchema,
+} from "../schemas/invoice.schema.js";
 
-export const InvoiceSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  amount: z.number(),
-  created_at: z.date(),
-  updated_at: z.date(),
-});
-
-export const CreateInvoiceSchema = InvoiceSchema.pick({
-  title: true,
-  amount: true,
-});
-
-export type InvoiceType = z.infer<typeof InvoiceSchema>;
-export type CreateInvoiceType = z.infer<typeof CreateInvoiceSchema>;
+export type InvoiceType = Static<typeof InvoiceSchema>;
+export type CreateInvoiceType = Static<typeof CreateInvoiceSchema>;

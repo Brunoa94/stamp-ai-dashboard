@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import * as healthController from "../controllers/health.controller.js";
 import healthSchema from "../schemas/health.schema.js";
 
 async function routes(fastify: FastifyInstance) {
   fastify
-    .withTypeProvider<ZodTypeProvider>()
+    .withTypeProvider<TypeBoxTypeProvider>()
     .get("/", { schema: healthSchema }, healthController.getHealth);
 }
 
