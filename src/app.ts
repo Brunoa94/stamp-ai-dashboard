@@ -5,6 +5,7 @@ import healthRoutes from "./routes/health.js";
 import invoiceRoutes from "./routes/invoices.js";
 import { env } from "./config/env.js";
 import { ErrorType } from "./types/shared.js";
+import prismaPlugin from "./plugins/prismaPlugin.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -20,6 +21,8 @@ export function buildApp() {
   app.register(fastifyPostgres.default, {
     connectionString: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_SERVICE}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
   });
+
+  app.register(prismaPlugin);
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);
