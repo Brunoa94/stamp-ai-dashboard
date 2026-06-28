@@ -6,6 +6,9 @@ import invoiceRoutes from "./routes/invoices.js";
 import { env } from "./config/env.js";
 import { ErrorType } from "./types/shared.js";
 import prismaPlugin from "./plugins/prismaPlugin.js";
+import swagger from "@fastify/swagger";
+import swaggerUI from "@fastify/swagger-ui";
+import paymentProviderRoutes from "./routes/payment-provider.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -30,8 +33,27 @@ export function buildApp() {
     reply.code(status).send(err.error);
   });
 
+  app.register(swagger, {
+    openapi: {
+      info: {
+        title: "Stamp AI Dashboard API",
+        description: "API documentation",
+        version: "1.0.0",
+      },
+    },
+  });
+
+  app.register(swaggerUI, {
+    routePrefix: "/docs",
+    uiConfig: {
+      docExpansion: "list",
+      deepLinking: false,
+    },
+  });
+
   app.register(healthRoutes, { prefix: "/api/health" });
   app.register(invoiceRoutes, { prefix: "/api/invoice" });
+  app.register(paymentProviderRoutes, { prefix: "/api/payment_provider" });
 
   return app;
 }

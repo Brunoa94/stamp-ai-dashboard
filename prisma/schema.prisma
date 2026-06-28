@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model users {
+model Admin {
   id       Int     @id @default(autoincrement())
   name     String? @db.VarChar(30)
   email    String? @db.VarChar(30)
@@ -27,4 +27,7 @@ model Invoice {
   amount   Int?    @db.Integer
   paymentProviderName String @db.VarChar(30)
   provider PaymentProvider @relation(fields: [paymentProviderName], references: [name])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

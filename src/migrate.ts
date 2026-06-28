@@ -1,8 +1,8 @@
-import pg from 'pg';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
+import pg from "pg";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -17,18 +17,18 @@ async function runMigrations() {
   });
 
   try {
-    console.log('Running migrations...');
+    console.log("Running migrations...");
 
     // Read and execute migration file
-    const migrationPath = join(__dirname, 'migrations', '001_create_users.sql');
-    const migrationSQL = readFileSync(migrationPath, 'utf-8');
+    const migrationPath = join(__dirname, "migrations", "001_create_users.sql");
+    const migrationSQL = readFileSync(migrationPath, "utf-8");
 
     await pool.query(migrationSQL);
-    console.log('✓ Migration 001_create_users.sql completed successfully');
+    console.log("✓ Migration 001_create_users.sql completed successfully");
 
-    console.log('All migrations completed!');
+    console.log("All migrations completed!");
   } catch (error) {
-    console.error('Migration failed:', error);
+    console.error("Migration failed:", error);
     process.exit(1);
   } finally {
     await pool.end();

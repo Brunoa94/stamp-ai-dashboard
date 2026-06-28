@@ -1,11 +1,12 @@
 import { CreateInvoiceType, InvoiceType } from "../types/invoices.js";
 
 const createInvoiceMapper = (body: CreateInvoiceType): InvoiceType => ({
-  title: body.title,
-  amount: body.amount,
+  id: 0,
+  name: body.name ?? null,
+  amount: body.amount ?? null,
+  paymentProviderName: body.paymentProviderName,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
-  id: "",
 });
 
 export const InvoiceMapper = { createInvoiceMapper };
