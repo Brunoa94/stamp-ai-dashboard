@@ -15,11 +15,17 @@ model Admin {
 }
 
 model Invoice {
-  id       Int     @id @default(autoincrement())
-  name     String? @db.VarChar(30)
-  amount   Int?    @db.Integer
-  paymentProviderName String @db.VarChar(30)
+  id                  Int             @id @default(autoincrement())
+  name                String?         @db.VarChar(30)
+  amount              Int?
+  payment_provider_name String        @db.VarChar(30)
+  PaymentProvider     PaymentProvider @relation(fields: [payment_provider_name], references: [name])
+  created_at          String          @db.VarChar(50)
+  updated_at          String          @db.VarChar(50)
+}
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+model PaymentProvider {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique @db.VarChar(30)
+  Invoice Invoice[]
 }

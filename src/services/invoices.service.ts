@@ -9,7 +9,7 @@ function getAllInvoices(): InvoiceType[] {
       id: 1,
       name: "Test invoice",
       amount: 200,
-      paymentProviderName: "stripe",
+      payment_provider_name: "stripe",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -19,11 +19,12 @@ function getAllInvoices(): InvoiceType[] {
 async function createInvoice(body: CreateInvoiceType): Promise<InvoiceType> {
   try {
     const createdInvoice = await prisma.invoice.create({
-      data: body,
+      data: InvoiceMapper.createInvoiceMapper(body),
     });
 
     return InvoiceMapper.createInvoiceMapperResponse(createdInvoice);
-  } catch {
+  } catch (e) {
+    console.log("MERDA ", e);
     throw ErrorMapper.Create({
       status: 500,
       service: "SERVICE_INVOICES",

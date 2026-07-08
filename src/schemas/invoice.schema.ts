@@ -6,7 +6,7 @@ export const InvoiceSchema = Type.Object({
   id: Type.Number(),
   name: Type.Union([Type.String(), Type.Null()]),
   amount: Type.Union([Type.Number(), Type.Null()]),
-  paymentProviderName: Type.Union([
+  payment_provider_name: Type.Union([
     Type.Literal("stripe"),
     Type.Literal("paypal"),
   ]),
@@ -22,7 +22,7 @@ export const getAllInvoicesSchema = {
 
 export const CreateInvoiceSchema = Type.Pick(
   InvoiceSchema,
-  ["name", "amount", "paymentProviderName"],
+  ["name", "amount", "payment_provider_name"],
   { additionalProperties: false },
 );
 
