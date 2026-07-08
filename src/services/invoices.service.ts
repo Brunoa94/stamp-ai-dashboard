@@ -1,3 +1,4 @@
+import { prisma } from "../lib/prisma.js";
 import { ErrorMapper } from "../mappers/error.mapper.js";
 import { InvoiceMapper } from "../mappers/invoice.mapper.js";
 import { CreateInvoiceType, InvoiceType } from "../types/invoices.js";
@@ -8,15 +9,20 @@ function getAllInvoices(): InvoiceType[] {
       id: 1,
       name: "Test invoice",
       amount: 200,
-      paymentProviderName: "Stripe",
+      paymentProviderName: "stripe",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
   ];
 }
 
-function createInvoice(body: CreateInvoiceType): InvoiceType {
+async function createInvoice(body: CreateInvoiceType): Promise<InvoiceType> {
   try {
+    const createdInvoice = await prisma.invoice.create({
+      data: body,
+    });
+
+    return InvoiceMapper.createInvoiceMapperResponse(createdInvoice);
   } catch {
     throw ErrorMapper.Create({
       status: 500,
@@ -24,8 +30,6 @@ function createInvoice(body: CreateInvoiceType): InvoiceType {
       description: "Failed to create invoice",
     });
   }
-
-  return InvoiceMapper.createInvoiceMapper(body);
 }
 
 export const InvoicesService = {

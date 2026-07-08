@@ -8,3 +8,5 @@ export type PaymentProviderType = Static<typeof PaymentProviderSchema>;
 export type CreatePaymentProviderType = Static<
   typeof CreatePaymentProviderSchema
 >;
+
+export type PaymentMethodsType = "stripe" | "paypal";

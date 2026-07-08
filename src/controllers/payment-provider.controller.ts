@@ -12,6 +12,7 @@ async function createPaymentProvider(
       await PaymentProviderService.createPaymentProvider({
         body: request.body,
       });
+
     return reply.code(200).send(createdPaymentProvider);
   } catch (e) {
     const error = e as ErrorType;

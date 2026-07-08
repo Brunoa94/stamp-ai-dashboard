@@ -1,3 +1,4 @@
+import { InvoiceModel } from "../../generated/prisma/models/Invoice.js";
 import { CreateInvoiceType, InvoiceType } from "../types/invoices.js";
 
 const createInvoiceMapper = (body: CreateInvoiceType): InvoiceType => ({
@@ -9,4 +10,15 @@ const createInvoiceMapper = (body: CreateInvoiceType): InvoiceType => ({
   updated_at: new Date().toISOString(),
 });
 
-export const InvoiceMapper = { createInvoiceMapper };
+const createInvoiceMapperResponse = (body: InvoiceModel) => ({
+  ...body,
+  paymentProviderName:
+    body.paymentProviderName as InvoiceType["paymentProviderName"],
+  created_at: body.created_at.toISOString(),
+  updated_at: body.updated_at.toISOString(),
+});
+
+export const InvoiceMapper = {
+  createInvoiceMapper,
+  createInvoiceMapperResponse,
+};

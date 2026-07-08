@@ -14,19 +14,11 @@ model Admin {
   password String? @db.VarChar(255)
 }
 
-model PaymentProvider {
-  id  Int @id @default(autoincrement())
-  name String @unique @db.VarChar(30)
-
-  invoices Invoice[]
-}
-
 model Invoice {
   id       Int     @id @default(autoincrement())
   name     String? @db.VarChar(30)
   amount   Int?    @db.Integer
   paymentProviderName String @db.VarChar(30)
-  provider PaymentProvider @relation(fields: [paymentProviderName], references: [name])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
