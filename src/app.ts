@@ -9,6 +9,7 @@ import prismaPlugin from "./plugins/prismaPlugin.js";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import paymentProviderRoutes from "./routes/payment-provider.js";
+import stripeProviderRoutes from "./routes/stripe.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -54,6 +55,7 @@ export function buildApp() {
   app.register(healthRoutes, { prefix: "/api/health" });
   app.register(invoiceRoutes, { prefix: "/api/invoice" });
   app.register(paymentProviderRoutes, { prefix: "/api/payment_provider" });
+  app.register(stripeProviderRoutes, { prefix: "/stripe" });
 
   return app;
 }
