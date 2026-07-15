@@ -24,7 +24,6 @@ async function createInvoice(body: CreateInvoiceType): Promise<InvoiceType> {
 
     return InvoiceMapper.createInvoiceMapperResponse(createdInvoice);
   } catch (e) {
-    console.log("MERDA ", e);
     throw ErrorMapper.Create({
       status: 500,
       service: "SERVICE_INVOICES",
