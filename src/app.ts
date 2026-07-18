@@ -11,6 +11,8 @@ import swaggerUI from "@fastify/swagger-ui";
 import paymentProviderRoutes from "./routes/payment-provider.js";
 import stripeProviderRoutes from "./routes/stripe.js";
 import adminRoutes from "./routes/admin.js";
+import authRoutes from "./routes/auth.js";
+import jwtPlugin from "./plugins/jwt.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -28,6 +30,7 @@ export function buildApp() {
   });
 
   app.register(prismaPlugin);
+  app.register(jwtPlugin);
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);
@@ -42,6 +45,15 @@ export function buildApp() {
         description: "API documentation",
         version: "1.0.0",
       },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+      },
     },
   });
 
@@ -53,6 +65,7 @@ export function buildApp() {
     },
   });
 
+  app.register(authRoutes, { prefix: "/api/auth" });
   app.register(healthRoutes, { prefix: "/api/health" });
   app.register(invoiceRoutes, { prefix: "/api/invoice" });
   app.register(paymentProviderRoutes, { prefix: "/api/payment_provider" });

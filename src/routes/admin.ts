@@ -16,7 +16,11 @@ async function adminRoutes(fastify: FastifyInstance) {
     .get("/", { schema: getAllAdminsSchema }, AdminController.getAllAdmins);
   fastify
     .withTypeProvider<TypeBoxTypeProvider>()
-    .post("/", { schema: createAdminSchema }, AdminController.createAdmin);
+    .post(
+      "/",
+      { schema: createAdminSchema, onRequest: [fastify.authenticate] },
+      AdminController.createAdmin,
+    );
 }
 
 export default adminRoutes;

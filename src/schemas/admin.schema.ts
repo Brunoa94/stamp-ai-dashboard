@@ -22,6 +22,7 @@ export const CreateAdminSchema = Type.Pick(
 );
 
 export const createAdminSchema = {
+  security: [{ bearerAuth: [] }],
   body: CreateAdminSchema,
   response: {
     200: AdminSchema,

@@ -1,4 +1,4 @@
-type ErrorStatus = 500 | 200;
+type ErrorStatus = 500 | 200 | 401;
 
 type CreateErrorType = {
   status: ErrorStatus;
