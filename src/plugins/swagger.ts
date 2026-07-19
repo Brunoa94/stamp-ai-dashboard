@@ -8,9 +8,22 @@ const swaggerPlugin: FastifyPluginAsync = fastifyPlugin(async (server) => {
     openapi: {
       info: {
         title: "Stamp AI Dashboard API",
-        description: "API documentation",
+        description:
+          "Internal API for admins, authentication, invoices, and Stripe operations.",
         version: "1.0.0",
       },
+      servers: [
+        {
+          url: "http://localhost:3000",
+          description: "Local development",
+        },
+      ],
+      tags: [
+        { name: "Health", description: "Service status endpoints" },
+        { name: "Auth", description: "Authentication endpoints" },
+        { name: "Invoices", description: "Invoice management" },
+        { name: "Stripe", description: "Stripe integration endpoints" },
+      ],
       components: {
         securitySchemes: {
           bearerAuth: {
@@ -27,7 +40,8 @@ const swaggerPlugin: FastifyPluginAsync = fastifyPlugin(async (server) => {
     routePrefix: "/docs",
     uiConfig: {
       docExpansion: "list",
-      deepLinking: false,
+      deepLinking: true,
+      displayRequestDuration: true,
     },
   });
 });
