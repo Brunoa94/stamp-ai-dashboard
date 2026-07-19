@@ -5,6 +5,7 @@ const HealthResponseSchema = Type.Object({
 });
 
 const healthSchema = {
+  tags: ["Health"],
   response: {
     200: HealthResponseSchema,
   },

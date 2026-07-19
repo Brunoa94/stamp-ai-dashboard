@@ -10,6 +10,7 @@ export const AdminSchema = Type.Object({
 });
 
 export const getAllAdminsSchema = {
+  tags: ["Admins"],
   response: {
     200: Type.Array(AdminSchema),
   },
@@ -22,6 +23,7 @@ export const CreateAdminSchema = Type.Pick(
 );
 
 export const createAdminSchema = {
+  tags: ["Admins"],
   security: [{ bearerAuth: [] }],
   body: CreateAdminSchema,
   response: {

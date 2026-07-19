@@ -20,6 +20,7 @@ const swaggerPlugin: FastifyPluginAsync = fastifyPlugin(async (server) => {
       ],
       tags: [
         { name: "Health", description: "Service status endpoints" },
+        { name: "Admins", description: "Admins endpoints" },
         { name: "Auth", description: "Authentication endpoints" },
         { name: "Invoices", description: "Invoice management" },
         { name: "Stripe", description: "Stripe integration endpoints" },

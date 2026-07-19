@@ -5,7 +5,6 @@ type PaymentMethodsType = "stripe" | "paypal";
 export const InvoiceSchema = Type.Object({
   id: Type.Number({
     description: "Invoice unique identifier",
-    examples: [123],
   }),
   name: Type.Union(
     [
