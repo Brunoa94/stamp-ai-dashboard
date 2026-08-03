@@ -10,8 +10,10 @@ import paymentProviderRoutes from "./routes/payment-provider.js";
 import stripeProviderRoutes from "./routes/stripe.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
+import githubRoutes from "./routes/github.js";
 import jwtPlugin from "./plugins/jwt.js";
 import swaggerPlugin from "./plugins/swagger.js";
+import redisPlugin from "./plugins/redis.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -31,13 +33,15 @@ export function buildApp() {
   app.register(prismaPlugin);
   app.register(jwtPlugin);
   app.register(swaggerPlugin);
+  app.register(redisPlugin);
 
   app.register(authRoutes, { prefix: "/api/auth" });
   app.register(healthRoutes, { prefix: "/api/health" });
   app.register(invoiceRoutes, { prefix: "/api/invoices" });
   app.register(paymentProviderRoutes, { prefix: "/api/payment_providers" });
-  app.register(stripeProviderRoutes, { prefix: "/stripe" });
-  app.register(adminRoutes, { prefix: "/admins" });
+  app.register(stripeProviderRoutes, { prefix: "(/api/stripe" });
+  app.register(adminRoutes, { prefix: "/api/admins" });
+  app.register(githubRoutes, { prefix: "/api/github" });
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);
