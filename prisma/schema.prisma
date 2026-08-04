@@ -31,3 +31,97 @@ model PaymentProvider {
   name    String    @unique @db.VarChar(30)
   Invoice Invoice[]
 }
+
+
+/** GITHUB ENTITIES*/
+model GithubRepository {
+  id                   Int                @id @default(autoincrement())
+  github_repository_id BigInt             @unique
+  installation_id      Int
+  owner_id             BigInt?
+  owner_login          String             @db.VarChar(100)
+  name                 String             @db.VarChar(100)
+  full_name            String             @db.VarChar(200)
+  private              Boolean            @default(false)
+  archived             Boolean            @default(false)
+  disabled             Boolean            @default(false)
+  default_branch       String?            @db.VarChar(100)
+  html_url             String?            @db.VarChar(255)
+  api_url              String?            @db.VarChar(255)
+  pushed_at            DateTime?
+  github_created_at    DateTime?
+  github_updated_at    DateTime?
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
+
+  issues               GithubIssue[]
+  events               GithubIssueEvent[]
+
+  @@unique([installation_id, full_name])
+  @@index([installation_id])
+  @@index([owner_login])
+}
+
+model GithubIssue {
+  id                Int                @id @default(autoincrement())
+  github_issue_id   BigInt             @unique
+  repository_id     Int
+  installation_id   Int
+  issue_number      Int
+  node_id           String?            @db.VarChar(100)
+  title             String             @db.VarChar(300)
+  body              String?
+  state             String             @db.VarChar(20)
+  state_reason      String?            @db.VarChar(30)
+  author_id         BigInt?
+  author_login      String?            @db.VarChar(100)
+  labels            Json?
+  assignees         Json?
+  comments_count    Int                @default(0)
+  is_pull_request   Boolean            @default(false)
+  html_url          String?            @db.VarChar(255)
+  github_created_at DateTime?
+  github_updated_at DateTime?
+  github_closed_at  DateTime?
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
+
+  repository        GithubRepository   @relation(fields: [repository_id], references: [id], onDelete: Cascade)
+  events            GithubIssueEvent[]
+
+  @@unique([repository_id, issue_number])
+  @@index([installation_id])
+  @@index([repository_id, state])
+  @@index([github_updated_at])
+}
+
+model GithubIssueEvent {
+  id                Int                 @id @default(autoincrement())
+  delivery_id       String              @unique @db.VarChar(100)
+  event_type        String              @db.VarChar(50)
+  action            String?             @db.VarChar(50)
+  installation_id   Int?
+  repository_id     Int?
+  issue_id          Int?
+  sender_id         BigInt?
+  sender_login      String?             @db.VarChar(100)
+  signature_valid   Boolean             @default(false)
+  raw_payload       Json
+  processing_status String              @default("pending") @db.VarChar(20)
+  processing_error  String?
+  retry_count       Int                 @default(0)
+  received_at       DateTime            @default(now())
+  event_occurred_at DateTime?
+  processed_at      DateTime?
+
+  repository        GithubRepository?   @relation(fields: [repository_id], references: [id], onDelete: SetNull)
+  issue             GithubIssue?        @relation(fields: [issue_id], references: [id], onDelete: SetNull)
+
+  @@index([event_type, action])
+  @@index([installation_id])
+  @@index([repository_id])
+  @@index([issue_id])
+  @@index([processing_status])
+  @@index([received_at])
+}
+
