@@ -1,6 +1,10 @@
-import { GithubWebhookPayload } from "../types/github.js";
-
-type GithubIssueEventStatus = "pending" | "processed" | "failed";
+import {
+  CreateGithubIssueData,
+  CreateGithubIssueEventData,
+  CreateGithubRepositoryData,
+  GithubIssueEventStatus,
+  GithubWebhookPayload,
+} from "../types/github.js";
 
 type CreateGithubIssueEventMapperInput = {
   payload: GithubWebhookPayload;
@@ -33,7 +37,9 @@ const toInt = (value?: number | string | null): number | undefined => {
   return Number.isNaN(parsed) ? undefined : parsed;
 };
 
-const createGithubRepositoryMapper = (payload: GithubWebhookPayload) => {
+const createGithubRepositoryMapper = (
+  payload: GithubWebhookPayload,
+): CreateGithubRepositoryData => {
   if (!payload.repository) {
     throw new Error("Missing repository in GitHub payload");
   }
@@ -65,7 +71,7 @@ const createGithubRepositoryMapper = (payload: GithubWebhookPayload) => {
 const createGithubIssueMapper = (
   payload: GithubWebhookPayload,
   repositoryId: number,
-) => {
+): CreateGithubIssueData => {
   if (!payload.issue) {
     throw new Error("Missing issue in GitHub payload");
   }
@@ -110,7 +116,7 @@ const createGithubIssueEventMapper = ({
   processingError,
   retryCount = 0,
   processedAt,
-}: CreateGithubIssueEventMapperInput) => ({
+}: CreateGithubIssueEventMapperInput): CreateGithubIssueEventData => ({
   delivery_id: deliveryId,
   event_type: eventType,
   action: payload.action ?? null,
