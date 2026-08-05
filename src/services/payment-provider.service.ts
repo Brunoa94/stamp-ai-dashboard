@@ -4,10 +4,6 @@ import { PaymentProviderMapper } from "../mappers/payment-provider.mapper.js";
 import { prisma } from "../lib/prisma.js";
 import { PaymentProviderType } from "../types/payment-provider.js";
 
-type PaymentProviderCreateResponseType = {
-  id: number;
-};
-
 async function createPaymentProvider({
   body,
 }: {
