@@ -2,6 +2,8 @@
 
 Fastify API scaffold in TypeScript using a common folder structure.
 
+✨ **Claude connected** - This project is set up for AI-assisted development with Claude.
+
 ## Run
 
 ```bash
