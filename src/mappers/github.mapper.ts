@@ -1,4 +1,4 @@
-import { GithubWebhookPayload } from "../types/github.js";
+import { GithubIssueLabel, GithubWebhookPayload } from "../types/github.js";
 
 type GithubIssueEventStatus = "pending" | "processed" | "failed";
 
@@ -87,7 +87,7 @@ const createGithubIssueMapper = (
     state_reason: payload.issue.state_reason ?? null,
     author_id: toBigInt(payload.issue.user?.id),
     author_login: payload.issue.user?.login ?? null,
-    labels: payload.issue.labels ?? null,
+    labels: payload.issue.labels.map((label) => label?.name) ?? [],
     assignees: payload.issue.assignees ?? null,
     comments_count: payload.issue.comments ?? 0,
     is_pull_request: Boolean(payload.issue.pull_request),

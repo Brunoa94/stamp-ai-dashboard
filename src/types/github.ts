@@ -1,5 +1,7 @@
+import { FastifyBaseLogger } from "fastify";
 import { Static } from "@fastify/type-provider-typebox";
 import {
+  GithubClaudeLabelIssueSchema,
   GithubWebhookBodySchema,
   GithubWebhookInstallationSchema,
   GithubWebhookIssueSchema,
@@ -42,6 +44,7 @@ export type ProcessGithubWebhookInput = {
   deliveryId: string;
   eventType: string;
   signatureValid: boolean;
+  logger: FastifyBaseLogger;
 };
 
 export type RedisSetLike = {
@@ -59,3 +62,15 @@ export type DedupeGithubWebhookDeliveryInput = {
   deliveryId: string;
   ttlSeconds?: number;
 };
+
+export type GithubIssueLabel = {
+  id: number;
+  url: string;
+  name: string;
+  color: string;
+  default: false;
+  node_id: string;
+  description: string;
+};
+
+export type LabelClaudeOnIssue = Static<typeof GithubClaudeLabelIssueSchema>;

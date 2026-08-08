@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
   GithubWebhookPayload,
+  LabelClaudeOnIssue,
   ProcessGithubWebhookInput,
 } from "../types/github.js";
 import { ErrorType, FastifyBody } from "../types/shared.js";
@@ -31,6 +32,7 @@ async function webhookEvent(
       deliveryId,
       eventType: eventType ?? "unknown",
       signatureValid: true,
+      logger: request.log,
     };
 
     await GithubService.processWebhook(body);
@@ -42,6 +44,25 @@ async function webhookEvent(
   }
 }
 
+async function labelClaudeOnGithubIssue(
+  request: FastifyRequest<FastifyBody<LabelClaudeOnIssue>>,
+  reply: FastifyReply,
+) {
+  try {
+    const response = await GithubService.labelClaudeOnIssue({
+      githubIssueId: request.body.github_issue_id,
+      githubIssueNumber: request.body.github_issue_number,
+      logger: request.log,
+    });
+
+    return reply.status(200).send({ ok: true });
+  } catch (e) {
+    const error = e as ErrorType;
+    return reply.code(error.status).send(error.error);
+  }
+}
+
 export const GithubController = {
   webhookEvent,
+  labelClaudeOnGithubIssue,
 };

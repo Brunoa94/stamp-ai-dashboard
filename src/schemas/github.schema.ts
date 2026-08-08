@@ -25,6 +25,14 @@ export const GithubWebhookRepositorySchema = Type.Object({
   updated_at: Type.Optional(Type.Union([Type.String(), Type.Null()])),
 });
 
+export const GithubWebhookIssueLabelSchema = Type.Object({
+  id: Type.Optional(Type.Number()),
+  url: Type.Optional(Type.String()),
+  name: Type.Optional(Type.String()),
+  color: Type.Optional(Type.String()),
+  default: Type.Optional(Type.Boolean()),
+});
+
 export const GithubWebhookIssueSchema = Type.Object({
   id: Type.Union([Type.Number(), Type.String()]),
   number: Type.Number(),
@@ -34,7 +42,7 @@ export const GithubWebhookIssueSchema = Type.Object({
   state: Type.String(),
   state_reason: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   user: Type.Optional(Type.Union([GithubWebhookUserSchema, Type.Null()])),
-  labels: Type.Optional(Type.Unknown()),
+  labels: Type.Array(GithubWebhookIssueLabelSchema),
   assignees: Type.Optional(Type.Unknown()),
   comments: Type.Optional(Type.Number()),
   pull_request: Type.Optional(Type.Unknown()),
@@ -86,6 +94,23 @@ export const githubWebhookSchema = {
   response: {
     200: GithubWebhookProcessed,
     202: GithubWebhookProcessed,
+    400: ErrorSchema,
+    401: ErrorSchema,
+  },
+};
+
+export const GithubClaudeLabelIssueSchema = Type.Object({
+  github_issue_id: Type.Number(),
+  github_issue_number: Type.Number(),
+});
+
+export const githubClaudeLabelIssue = {
+  tags: ["GitHub"],
+  summary: "Sets Claude as Label on a Github issue",
+  description: "Labels an issue with the 'claude' label",
+  operationId: "githubLabelClaude",
+  body: GithubClaudeLabelIssueSchema,
+  response: {
     400: ErrorSchema,
     401: ErrorSchema,
   },

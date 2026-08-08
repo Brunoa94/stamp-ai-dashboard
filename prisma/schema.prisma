@@ -75,7 +75,7 @@ model GithubIssue {
   state_reason      String?            @db.VarChar(30)
   author_id         BigInt?
   author_login      String?            @db.VarChar(100)
-  labels            Json?
+  labels            String[]           @default([])
   assignees         Json?
   comments_count    Int                @default(0)
   is_pull_request   Boolean            @default(false)

@@ -2,7 +2,10 @@ import { FastifyInstance } from "fastify";
 import crypto from "node:crypto";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { GithubController } from "../controllers/github.controller.js";
-import { githubWebhookSchema } from "../schemas/github.schema.js";
+import {
+  githubClaudeLabelIssue,
+  githubWebhookSchema,
+} from "../schemas/github.schema.js";
 
 async function githubRoute(fastify: FastifyInstance) {
   // Keep the raw request body for HMAC verification before JSON parsing.
@@ -32,6 +35,14 @@ async function githubRoute(fastify: FastifyInstance) {
       "/webhooks",
       { schema: githubWebhookSchema },
       GithubController.webhookEvent,
+    );
+
+  fastify
+    .withTypeProvider<TypeBoxTypeProvider>()
+    .post(
+      "/label-claude",
+      { schema: githubClaudeLabelIssue },
+      GithubController.labelClaudeOnGithubIssue,
     );
 }
 

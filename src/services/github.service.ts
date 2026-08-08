@@ -1,9 +1,11 @@
 import { GithubRepository, Prisma } from "../../generated/prisma/client.js";
+import { OctokitClient } from "../lib/octokit.js";
 import { prisma } from "../lib/prisma.js";
 import { ErrorMapper } from "../mappers/error.mapper.js";
 import { GithubMapper } from "../mappers/github.mapper.js";
 import {
   DedupeGithubWebhookDeliveryInput,
+  GithubIssueLabel,
   PersistGithubIssueEventInput,
   ProcessGithubWebhookInput,
   UpsertGithubIssueInput,
@@ -70,7 +72,7 @@ async function upsertGithubIssue({
     );
     const data = {
       ...mappedData,
-      labels: toNullableJson(mappedData.labels),
+      labels: mappedData?.labels.map((label?: string) => label ?? "") ?? [],
       assignees: toNullableJson(mappedData.assignees),
     };
 
@@ -83,7 +85,7 @@ async function upsertGithubIssue({
     });
 
     return response;
-  } catch {
+  } catch (e) {
     throw ErrorMapper.Create({
       status: 500,
       service: "SERVICE_GITHUB",
@@ -113,6 +115,7 @@ async function persistGithubIssueEvent({
       processingStatus: "processed",
       processedAt: new Date(),
     });
+
     const data = {
       ...mappedData,
       raw_payload: toNullableJson(mappedData.raw_payload),
@@ -136,34 +139,124 @@ async function persistGithubIssueEvent({
   }
 }
 
+async function labelClaudeOnIssue({
+  githubIssueId,
+  githubIssueNumber,
+  logger,
+}: {
+  githubIssueId: number;
+  githubIssueNumber: number;
+  logger: import("fastify").FastifyBaseLogger;
+}) {
+  logger.info(
+    { githubIssueId, githubIssueNumber },
+    "Labeling issue with Claude on GitHub",
+  );
+
+  try {
+    await OctokitClient.client.rest.issues.addLabels({
+      owner: process.env.GITHUB_ORG || "",
+      repo: process.env.GITHUB_REPO || "",
+      issue_number: githubIssueNumber,
+      labels: ["claude"],
+    });
+    logger.info({ githubIssueNumber }, "Applied claude label on GitHub issue");
+  } catch (e) {
+    logger.error(
+      { githubIssueNumber, err: e },
+      "Failed to apply claude label on GitHub",
+    );
+    throw ErrorMapper.Create({
+      status: 500,
+      service: "SERVICE_GITHUB",
+      description: "Failed to label issue on Github with Claude Code",
+    });
+  }
+
+  try {
+    const response = await prisma.githubIssue.update({
+      where: {
+        github_issue_id: githubIssueId,
+      },
+      data: {
+        labels: {
+          push: "claude",
+        },
+      },
+    });
+    logger.info({ githubIssueId }, "Updated claude label in database");
+
+    return response;
+  } catch (e) {
+    logger.error(
+      { githubIssueId, err: e },
+      "Failed to update claude label in database",
+    );
+    throw ErrorMapper.Create({
+      status: 500,
+      service: "SERVICE_GITHUB",
+      description: "Failed to update label on database with Claude Code",
+    });
+  }
+}
+
 async function processWebhook({
   payload,
   rawPayload,
   deliveryId,
   eventType,
   signatureValid,
+  logger,
 }: ProcessGithubWebhookInput) {
-  const repository = await upsertGithubRepository({ payload });
-  const issue = await upsertGithubIssue({
-    payload,
-    repositoryId: repository.id,
-  });
+  logger.info({ deliveryId, eventType }, "Processing GitHub webhook");
 
-  const event = await persistGithubIssueEvent({
-    payload,
-    rawPayload,
-    deliveryId,
-    eventType,
-    signatureValid,
-    repositoryId: repository.id,
-    issueId: issue?.id,
-  });
+  try {
+    const repository = await upsertGithubRepository({ payload });
+    logger.info(
+      { repositoryId: repository.id, repositoryName: repository.name },
+      "Upserted GitHub repository",
+    );
 
-  return {
-    repository,
-    issue,
-    event,
-  };
+    const issue = await upsertGithubIssue({
+      payload,
+      repositoryId: repository.id,
+    });
+    if (issue) {
+      logger.info(
+        { issueId: issue.id, issueNumber: issue.issue_number },
+        "Upserted GitHub issue",
+      );
+    } else {
+      logger.debug({ deliveryId }, "No issue in webhook payload");
+    }
+
+    const event = await persistGithubIssueEvent({
+      payload,
+      rawPayload,
+      deliveryId,
+      eventType,
+      signatureValid,
+      repositoryId: repository.id,
+      issueId: issue?.id,
+    });
+
+    logger.info(
+      { eventId: event.id, deliveryId },
+      "Persisted GitHub issue event",
+    );
+
+    return {
+      repository,
+      issue,
+      event,
+    };
+  } catch (e) {
+    logger.error(
+      { deliveryId, eventType, err: e },
+      "Failed to process GitHub webhook",
+    );
+    throw e;
+  }
 }
 
 export const GithubService = {
@@ -172,4 +265,5 @@ export const GithubService = {
   upsertGithubIssue,
   persistGithubIssueEvent,
   processWebhook,
+  labelClaudeOnIssue,
 };
