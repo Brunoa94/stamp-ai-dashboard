@@ -11,6 +11,7 @@ import stripeProviderRoutes from "./routes/stripe.js";
 import adminRoutes from "./routes/admin.js";
 import authRoutes from "./routes/auth.js";
 import githubRoutes from "./routes/github.js";
+import analyticsRoutes from "./routes/analytics.js";
 import jwtPlugin from "./plugins/jwt.js";
 import swaggerPlugin from "./plugins/swagger.js";
 import redisPlugin from "./plugins/redis.js";
@@ -42,6 +43,7 @@ export function buildApp() {
   app.register(stripeProviderRoutes, { prefix: "(/api/stripe" });
   app.register(adminRoutes, { prefix: "/api/admins" });
   app.register(githubRoutes, { prefix: "/api/github" });
+  app.register(analyticsRoutes, { prefix: "/api/analytics" });
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);
