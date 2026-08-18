@@ -20,12 +20,32 @@ function getDimensionValue(row: IRow, index: number): string {
   return row.dimensionValues?.[index]?.value ?? "";
 }
 
+function getDimensionValueInt(row: IRow, index: number): number {
+  const value = row.dimensionValues?.[index]?.value;
+  if (!value || value === "(not set)") return 0;
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+function getDimensionValueFloat(row: IRow, index: number): number {
+  const value = row.dimensionValues?.[index]?.value;
+  if (!value || value === "(not set)") return 0;
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
 function getMetricValueInt(row: IRow, index: number): number {
-  return parseInt(row.metricValues?.[index]?.value ?? "0", 10);
+  const value = row.metricValues?.[index]?.value;
+  if (!value) return 0;
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? 0 : parsed;
 }
 
 function getMetricValueFloat(row: IRow, index: number): number {
-  return parseFloat(row.metricValues?.[index]?.value ?? "0");
+  const value = row.metricValues?.[index]?.value;
+  if (!value) return 0;
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? 0 : parsed;
 }
 
 // Page View Event Mapper
@@ -47,11 +67,10 @@ function mapPageViewEvents(rows: IRow[]): ParsedPageViewEvent[] {
 
 // Step Change Event Mapper
 function mapStepChangeEvent(row: IRow): ParsedStepChangeEvent {
-  console.log("ROW: ", row);
   return {
     date: getDimensionValue(row, 0),
-    fromStep: parseInt(getDimensionValue(row, 1) || "0", 10),
-    toStep: parseInt(getDimensionValue(row, 2) || "0", 10),
+    fromStep: getDimensionValueInt(row, 1),
+    toStep: getDimensionValueInt(row, 2),
     direction: getDimensionValue(row, 3),
     eventCount: getMetricValueInt(row, 0),
   };
@@ -131,7 +150,7 @@ function mapImageUploadEvent(row: IRow): ParsedImageUploadEvent {
   return {
     date: getDimensionValue(row, 0),
     fileType: getDimensionValue(row, 1),
-    fileSizeKb: parseInt(getDimensionValue(row, 2) || "0", 10),
+    fileSizeKb: getDimensionValueInt(row, 2),
     eventCount: getMetricValueInt(row, 0),
   };
 }
@@ -144,8 +163,8 @@ function mapImageUploadEvents(rows: IRow[]): ParsedImageUploadEvent[] {
 function mapGenerateStartEvent(row: IRow): ParsedGenerateStartEvent {
   return {
     date: getDimensionValue(row, 0),
-    promptLength: parseInt(getDimensionValue(row, 1) || "0", 10),
-    preservation: parseInt(getDimensionValue(row, 2) || "0", 10),
+    promptLength: getDimensionValueInt(row, 1),
+    preservation: getDimensionValueInt(row, 2),
     eventCount: getMetricValueInt(row, 0),
   };
 }
@@ -158,7 +177,7 @@ function mapGenerateStartEvents(rows: IRow[]): ParsedGenerateStartEvent[] {
 function mapGenerateCompleteEvent(row: IRow): ParsedGenerateCompleteEvent {
   return {
     date: getDimensionValue(row, 0),
-    promptLength: parseInt(getDimensionValue(row, 1) || "0", 10),
+    promptLength: getDimensionValueInt(row, 1),
     usedReferenceImage: getDimensionValue(row, 2) === "true",
     eventCount: getMetricValueInt(row, 0),
   };
@@ -200,8 +219,8 @@ function mapCreateProductEvents(rows: IRow[]): ParsedCreateProductEvent[] {
 function mapSelectItemEvent(row: IRow): ParsedSelectItemEvent {
   return {
     date: getDimensionValue(row, 0),
-    itemId: getDimensionValue(row, 1),
-    itemName: getDimensionValue(row, 2),
+    itemId: "",
+    itemName: "",
     price: getMetricValueFloat(row, 1),
     eventCount: getMetricValueInt(row, 0),
   };
@@ -215,8 +234,8 @@ function mapSelectItemEvents(rows: IRow[]): ParsedSelectItemEvent[] {
 function mapAddToCartEvent(row: IRow): ParsedAddToCartEvent {
   return {
     date: getDimensionValue(row, 0),
-    itemId: getDimensionValue(row, 1),
-    itemName: getDimensionValue(row, 2),
+    itemId: "",
+    itemName: "",
     value: getMetricValueFloat(row, 1),
     eventCount: getMetricValueInt(row, 0),
   };
@@ -257,6 +276,8 @@ export const AnalyticsMapper = {
   mapAddToCartEvents,
   // Utility functions
   getDimensionValue,
+  getDimensionValueInt,
+  getDimensionValueFloat,
   getMetricValueInt,
   getMetricValueFloat,
 };

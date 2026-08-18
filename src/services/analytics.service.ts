@@ -79,6 +79,7 @@ async function getStepChangeEvents(
     metrics: [{ name: "eventCount" }],
     dimensionFilter: createEventFilter("step_change"),
   });
+
   return AnalyticsMapper.mapStepChangeEvents(response.rows ?? []);
 }
 
@@ -268,12 +269,8 @@ async function getSelectItemEvents(
   const [response] = await analyticsDataClient.runReport({
     property: `properties/${propertyId}`,
     dateRanges: [createDateRange(startDate, endDate)],
-    dimensions: [
-      { name: "date" },
-      { name: "itemId" },
-      { name: "itemName" },
-    ],
-    metrics: [{ name: "eventCount" }, { name: "itemRevenue" }],
+    dimensions: [{ name: "date" }],
+    metrics: [{ name: "eventCount" }, { name: "eventValue" }],
     dimensionFilter: createEventFilter("select_item"),
   });
 
@@ -288,11 +285,7 @@ async function getAddToCartEvents(
   const [response] = await analyticsDataClient.runReport({
     property: `properties/${propertyId}`,
     dateRanges: [createDateRange(startDate, endDate)],
-    dimensions: [
-      { name: "date" },
-      { name: "itemId" },
-      { name: "itemName" },
-    ],
+    dimensions: [{ name: "date" }],
     metrics: [{ name: "eventCount" }, { name: "eventValue" }],
     dimensionFilter: createEventFilter("add_to_cart"),
   });

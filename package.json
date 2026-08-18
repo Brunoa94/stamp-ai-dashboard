@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Brunoa94/stamp-ai-dashboard#readme",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1",
     "@fastify/jwt": "^10.2.0",
     "@fastify/redis": "^8.0.0",
     "@fastify/swagger": "^9.7.0",
@@ -46,7 +47,7 @@
     "@types/node": "^25.9.4",
     "@types/pg": "^8.20.0",
     "dotenv": "^17.4.2",
-    "prisma": "^7.8.0",
+    "prisma": "^6.12.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
