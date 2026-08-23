@@ -1,7 +1,7 @@
 import { Type } from "@fastify/type-provider-typebox";
 
 // Event name enum
-const AnalyticsEventNameSchema = Type.Union([
+export const AnalyticsEventNameSchema = Type.Union([
   // Auth
   Type.Literal("sign_up"),
   Type.Literal("login"),
@@ -30,8 +30,12 @@ const AnalyticsEventNameSchema = Type.Union([
 
 // Query parameters for date range
 const DateRangeQuerySchema = Type.Object({
-  startDate: Type.Optional(Type.String({ description: "Start date (e.g., '7daysAgo', '2024-01-01')" })),
-  endDate: Type.Optional(Type.String({ description: "End date (e.g., 'today', '2024-01-31')" })),
+  startDate: Type.Optional(
+    Type.String({ description: "Start date (e.g., '7daysAgo', '2024-01-01')" }),
+  ),
+  endDate: Type.Optional(
+    Type.String({ description: "End date (e.g., 'today', '2024-01-31')" }),
+  ),
 });
 
 // Response schemas

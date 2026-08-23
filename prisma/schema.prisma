@@ -125,3 +125,36 @@ model GithubIssueEvent {
   @@index([received_at])
 }
 
+
+model AnalyticsAnalysis {
+  id                  Int      @id @default(autoincrement())
+  analysis_type       String   @db.VarChar(50)
+  start_date          String   @db.VarChar(20)
+  end_date            String   @db.VarChar(20)
+  raw_analytics_data  Json
+  analysis_result     Json
+  model_used          String   @db.VarChar(50)
+  tokens_used         Int?
+  processing_time_ms  Int?
+  status              String   @default("completed") @db.VarChar(20)
+  error_message       String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  recommendations     AnalyticsRecommendation[]
+}
+
+model AnalyticsRecommendation {
+  id              Int       @id @default(autoincrement())
+  analysis_id     Int
+  category        String    @db.VarChar(50)
+  priority        String    @db.VarChar(20)
+  title           String    @db.VarChar(200)
+  description     String
+  expected_impact String?   @db.VarChar(100)
+  implemented     Boolean   @default(false)
+  implemented_at  DateTime?
+  created_at      DateTime  @default(now())
+
+  analysis        AnalyticsAnalysis @relation(fields: [analysis_id], references: [id], onDelete: Cascade)
+}

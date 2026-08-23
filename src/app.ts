@@ -15,6 +15,7 @@ import analyticsRoutes from "./routes/analytics.js";
 import jwtPlugin from "./plugins/jwt.js";
 import swaggerPlugin from "./plugins/swagger.js";
 import redisPlugin from "./plugins/redis.js";
+import analyticsAgentRoutes from "./routes/analytics-agent.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -44,6 +45,7 @@ export function buildApp() {
   app.register(adminRoutes, { prefix: "/api/admins" });
   app.register(githubRoutes, { prefix: "/api/github" });
   app.register(analyticsRoutes, { prefix: "/api/analytics" });
+  app.register(analyticsAgentRoutes, { prefix: "/api/analytics-agent" });
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);

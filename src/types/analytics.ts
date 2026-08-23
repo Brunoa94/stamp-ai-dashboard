@@ -22,7 +22,11 @@ export type AnalyticsEventNameT =
   | "size_select"
   // Navigation
   | "page_view"
-  | "step_change";
+  | "step_change"
+  | "scroll"
+  | "form_start"
+  | "first_visit"
+  | "user_engagement";
 
 export type AnalyticsItemT = {
   item_id: string;
