@@ -1,8 +1,6 @@
-import {
-  AnalyticsAgentService,
-  GAEventType,
-} from "../services/analytics-agent.service.js";
+import {} from "../services/analytics-agent.service.js";
 import { AnalyticsService } from "../services/analytics.service.js";
+import { GAEventType } from "../types/analytics-agents.js";
 import {
   ParsedAddToCartEvent,
   ParsedColorSelectEvent,
@@ -35,8 +33,8 @@ type ReturnAnalyticsServiceType =
   | ParsedAddToCartEvent;
 
 type ReturnAnalyticsType = (
-  startDate: string,
-  endDate: string,
+  start_date: string,
+  end_date: string,
 ) => Promise<ReturnAnalyticsServiceType[]>;
 
 const fromGAEventToService: Record<GAEventType, ReturnAnalyticsType> = {

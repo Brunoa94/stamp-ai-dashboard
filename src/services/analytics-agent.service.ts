@@ -4,6 +4,7 @@ import {
   GA_EVENTS_BY_FUNNEL,
   GAEventType,
   GAFunnelType,
+  RequestAnalyticsType,
 } from "../types/analytics-agents.js";
 
 function getEventsFromFunnels(funnels: GAFunnelType[]): GAEventType[] {
@@ -13,29 +14,24 @@ function getEventsFromFunnels(funnels: GAFunnelType[]): GAEventType[] {
 }
 
 async function retrieveAnalyticsData({
-  events,
   funnels,
-  startDate,
-  endDate,
-}: {
-  events?: GAEventType[];
-  funnels?: GAFunnelType[];
-  startDate: string;
-  endDate: string;
-}) {
+  start_date,
+  end_date,
+}: RequestAnalyticsType) {
   try {
     const selectedEvents = Array.from(
-      new Set([...(events ?? []), ...getEventsFromFunnels(funnels ?? [])]),
+      new Set([...getEventsFromFunnels(funnels ?? [])]),
     );
-
+    console.log("Selected: ", funnels);
     const analyticsResults = await Promise.all(
       selectedEvents.map((event: GAEventType) =>
-        AnalyticsAgentMapper.fromGAEventToService[event](startDate, endDate),
+        AnalyticsAgentMapper.fromGAEventToService[event](start_date, end_date),
       ),
     );
 
     return analyticsResults.flat();
   } catch (e) {
+    console.error(e);
     throw ErrorMapper.Create({
       status: 500,
       service: "ANALYTICS_AGENTS_SERVICE",

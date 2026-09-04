@@ -11,6 +11,7 @@ import {
   RecommendationIdParamsSchema,
   AnalysisQuerySchema,
   AnalyticsFunnelTypes,
+  RequestAnalyticsSchema,
 } from "../schemas/analytics-agents.schema.js";
 
 // Base types
@@ -32,6 +33,7 @@ export type UpdateAnalyticsAnalysisType = Static<
 export type CreateAnalyticsRecommendationType = Static<
   typeof CreateAnalyticsRecommendationSchema
 >;
+export type RequestAnalyticsType = Static<typeof RequestAnalyticsSchema>;
 export type UpdateAnalyticsRecommendationType = Static<
   typeof UpdateAnalyticsRecommendationSchema
 >;

@@ -19,7 +19,7 @@ async function sendPrompt({
 
     const message: Anthropic.Message =
       await AnthropicClient.messages.create(params);
-    console.log("MESSAGE_ ", message);
+
     return message;
   } catch (e) {
     console.error(e);

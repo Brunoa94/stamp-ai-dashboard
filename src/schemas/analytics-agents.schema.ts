@@ -62,6 +62,12 @@ export const CreateAnalyticsAnalysisSchema = Type.Object({
   events: AnalyticsFunnelTypes,
 });
 
+export const RequestAnalyticsSchema = Type.Object({
+  start_date: Type.String({ maxLength: 20 }),
+  end_date: Type.String({ maxLength: 20 }),
+  funnels: Type.Array(AnalyticsFunnelTypes),
+});
+
 export const UpdateAnalyticsAnalysisSchema = Type.Partial(
   CreateAnalyticsAnalysisSchema,
 );
@@ -139,7 +145,7 @@ export const createAnalysisSchema = {
   summary: "Create analytics analysis",
   description: "Creates a new analytics analysis record",
   operationId: "createAnalysis",
-  body: CreateAnalyticsAnalysisSchema,
+  body: RequestAnalyticsSchema,
   response: {
     201: AnalyticsAnalysisSchema,
     400: ErrorSchema,
