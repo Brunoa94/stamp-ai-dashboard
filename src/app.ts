@@ -1,21 +1,25 @@
 import Fastify from "fastify";
 import fastifyPostgres from "fastify-postgres";
 import { TypeBoxValidatorCompiler } from "@fastify/type-provider-typebox";
-import healthRoutes from "./routes/health.js";
-import invoiceRoutes from "./routes/invoice.js";
-import { env } from "./config/env.js";
-import { ErrorType } from "./types/shared.js";
-import prismaPlugin from "./plugins/prismaPlugin.js";
-import paymentProviderRoutes from "./routes/payment-provider.js";
-import stripeProviderRoutes from "./routes/stripe.js";
-import adminRoutes from "./routes/admin.js";
-import authRoutes from "./routes/auth.js";
-import githubRoutes from "./routes/github.js";
-import analyticsRoutes from "./routes/analytics.js";
-import jwtPlugin from "./plugins/jwt.js";
-import swaggerPlugin from "./plugins/swagger.js";
-import redisPlugin from "./plugins/redis.js";
-import analyticsAgentRoutes from "./routes/analytics-agent.js";
+
+// Shared
+import { env } from "./shared/config/env.js";
+import { ErrorType } from "./shared/types/shared.js";
+import prismaPlugin from "./shared/plugins/prismaPlugin.js";
+import jwtPlugin from "./shared/plugins/jwt.js";
+import swaggerPlugin from "./shared/plugins/swagger.js";
+import redisPlugin from "./shared/plugins/redis.js";
+
+// Modules
+import healthRoutes from "./modules/health/health.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
+import adminRoutes from "./modules/admin/admin.routes.js";
+import invoiceRoutes from "./modules/invoice/invoice.routes.js";
+import paymentProviderRoutes from "./modules/payment-provider/payment-provider.routes.js";
+import stripeProviderRoutes from "./modules/stripe/stripe.routes.js";
+import githubRoutes from "./modules/github/github.routes.js";
+import analyticsRoutes from "./modules/analytics/analytics.routes.js";
+import analyticsAgentRoutes from "./modules/analytics/analytics-agent.routes.js";
 
 export function buildApp() {
   const app = Fastify({

@@ -16,7 +16,7 @@ async function run(): Promise<void> {
   console.log("[CLAUDE DEBUG] key_detected: yes");
   console.log("[CLAUDE DEBUG] model:", process.env["ANTHROPIC_MODEL"] || "claude-haiku-4-5-20251001");
 
-  const { AnthropicClient } = await import("../../src/lib/anthropic.js");
+  const { AnthropicClient } = await import("../../src/modules/claude/anthropic.js");
 
   try {
     const message = await AnthropicClient.messages.create({

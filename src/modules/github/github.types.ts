@@ -1,0 +1,76 @@
+import { FastifyBaseLogger } from "fastify";
+import { Static } from "@fastify/type-provider-typebox";
+import {
+  GithubClaudeLabelIssueSchema,
+  GithubWebhookBodySchema,
+  GithubWebhookInstallationSchema,
+  GithubWebhookIssueSchema,
+  GithubWebhookRepositorySchema,
+  GithubWebhookUserSchema,
+} from "./github.schema.js";
+
+export type GithubUserPayload = Static<typeof GithubWebhookUserSchema>;
+export type GithubRepositoryPayload = Static<
+  typeof GithubWebhookRepositorySchema
+>;
+export type GithubIssuePayload = Static<typeof GithubWebhookIssueSchema>;
+export type GithubInstallationPayload = Static<
+  typeof GithubWebhookInstallationSchema
+>;
+export type GithubWebhookPayload = Static<typeof GithubWebhookBodySchema>;
+
+export type UpsertGithubRepositoryInput = {
+  payload: GithubWebhookPayload;
+};
+
+export type UpsertGithubIssueInput = {
+  payload: GithubWebhookPayload;
+  repositoryId: number;
+};
+
+export type PersistGithubIssueEventInput = {
+  payload: GithubWebhookPayload;
+  rawPayload: unknown;
+  deliveryId: string;
+  eventType: string;
+  signatureValid: boolean;
+  repositoryId?: number;
+  issueId?: number;
+};
+
+export type ProcessGithubWebhookInput = {
+  payload: GithubWebhookPayload;
+  rawPayload: unknown;
+  deliveryId: string;
+  eventType: string;
+  signatureValid: boolean;
+  logger: FastifyBaseLogger;
+};
+
+export type RedisSetLike = {
+  set: (
+    key: string,
+    value: string,
+    mode: "EX",
+    ttlSeconds: number,
+    condition: "NX",
+  ) => Promise<string | null>;
+};
+
+export type DedupeGithubWebhookDeliveryInput = {
+  redis: RedisSetLike;
+  deliveryId: string;
+  ttlSeconds?: number;
+};
+
+export type GithubIssueLabel = {
+  id: number;
+  url: string;
+  name: string;
+  color: string;
+  default: false;
+  node_id: string;
+  description: string;
+};
+
+export type LabelClaudeOnIssue = Static<typeof GithubClaudeLabelIssueSchema>;

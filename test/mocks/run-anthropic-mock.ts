@@ -2,8 +2,8 @@ import {
   createMockAnthropicMessage,
   mockAnthropicCreateFailure,
   mockAnthropicCreateSuccess,
-} from "./anthropic-client.mock.ts";
-import { AnthropicClient } from "../../src/lib/anthropic.ts";
+} from "./anthropic-client.mock.js";
+import { AnthropicClient } from "../../src/modules/claude/anthropic.js";
 
 async function run(): Promise<void> {
   console.log("[MOCK TEST] starting");

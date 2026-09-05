@@ -14,7 +14,7 @@ async function run(): Promise<void> {
     );
   }
 
-  const { ClaudeService } = await import("../../src/services/claude.service.js");
+  const { ClaudeService } = await import("../../src/modules/claude/claude.service.js");
 
   const message = await ClaudeService.sendPrompt({
     content: "Reply with exactly: REAL_CLAUDE_OK",

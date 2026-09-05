@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { AnthropicClient } from "../../src/lib/anthropic.js";
+import { AnthropicClient } from "../../src/modules/claude/anthropic.js";
 
 export function createMockAnthropicMessage(
   text = "Mock Claude response",
@@ -27,7 +27,7 @@ export function mockAnthropicCreateSuccess(
 
   AnthropicClient.messages.create = (async () => {
     return message;
-  }) as typeof AnthropicClient.messages.create;
+  }) as unknown as typeof AnthropicClient.messages.create;
 
   return () => {
     AnthropicClient.messages.create = previous;
@@ -42,7 +42,7 @@ export function mockAnthropicCreateFailure(
 
   AnthropicClient.messages.create = (async () => {
     throw error;
-  }) as typeof AnthropicClient.messages.create;
+  }) as unknown as typeof AnthropicClient.messages.create;
 
   return () => {
     AnthropicClient.messages.create = previous;
