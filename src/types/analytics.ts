@@ -1,3 +1,6 @@
+import { Static } from "@fastify/type-provider-typebox";
+import { AnalyticsFunnelTypes } from "../schemas/analytics-agents.schema.js";
+
 export type AnalyticsEventNameT =
   // Auth
   | "sign_up"
@@ -27,6 +30,8 @@ export type AnalyticsEventNameT =
   | "form_start"
   | "first_visit"
   | "user_engagement";
+
+export type AnalyticsFunnelT = Static<typeof AnalyticsFunnelTypes>;
 
 export type AnalyticsItemT = {
   item_id: string;

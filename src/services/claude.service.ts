@@ -4,7 +4,7 @@ import { AnthropicClient } from "../lib/anthropic.js";
 import { ClaudePromptType } from "../types/claude.js";
 
 const STATIC_PARAMS = {
-  max_tokens: 300,
+  max_tokens: Number(process.env.ANTHROPIC_API_KEY) || 10000,
   model: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001",
 };
 
