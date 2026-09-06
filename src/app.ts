@@ -20,6 +20,7 @@ import stripeProviderRoutes from "./modules/stripe/stripe.routes.js";
 import githubRoutes from "./modules/github/github.routes.js";
 import analyticsRoutes from "./modules/analytics/analytics.routes.js";
 import analyticsAgentRoutes from "./modules/analytics/analytics-agent.routes.js";
+import databaseProviderRoutes from "./modules/supabase/supabse.router.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -50,6 +51,7 @@ export function buildApp() {
   app.register(githubRoutes, { prefix: "/api/github" });
   app.register(analyticsRoutes, { prefix: "/api/analytics" });
   app.register(analyticsAgentRoutes, { prefix: "/api/analytics-agent" });
+  app.register(databaseProviderRoutes, { prefix: "/api/database" });
 
   app.setErrorHandler((err: ErrorType, _req, reply) => {
     app.log.error(err);

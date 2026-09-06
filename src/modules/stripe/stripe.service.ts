@@ -1,10 +1,7 @@
 import { stripe } from "./stripe.lib.js";
 import { ErrorMapper } from "../../shared/mappers/error.mapper.js";
 import { StripeMapper } from "./stripe.mapper.js";
-import {
-  StripeBalanceResponseType,
-  StripeBalanceType,
-} from "./stripe.types.js";
+import { StripeBalanceResponseType } from "./stripe.types.js";
 
 async function getBalance(): Promise<StripeBalanceResponseType | null> {
   try {
