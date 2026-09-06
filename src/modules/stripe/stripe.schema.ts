@@ -38,3 +38,38 @@ export const getStripeBalanceSchema = {
     200: StripeBalanceSchema,
   },
 };
+
+const StripeInvoiceSchema = Type.Object({
+  id: Type.String(),
+  number: Type.Union([Type.String(), Type.Null()]),
+  customer: Type.Union([Type.String(), Type.Null()]),
+  customer_email: Type.Union([Type.String(), Type.Null()]),
+  status: Type.Union([Type.String(), Type.Null()]),
+  currency: Type.String(),
+  subtotal: Type.Number(),
+  total: Type.Number(),
+  amount_paid: Type.Number(),
+  amount_due: Type.Number(),
+  created: Type.Number(),
+  hosted_invoice_url: Type.Union([Type.String(), Type.Null()]),
+  invoice_pdf: Type.Union([Type.String(), Type.Null()]),
+});
+
+export const StripeInvoicesSchema = Type.Object({
+  object: Type.Literal("list"),
+  url: Type.String(),
+  has_more: Type.Boolean(),
+  data: Type.Array(StripeInvoiceSchema),
+  updated_at: Type.String({ format: "date-time" }),
+});
+
+export const getStripeInvoicesSchema = {
+  tags: ["Stripe"],
+  summary: "Get Stripe invoices",
+  description: "Returns all Stripe invoices.",
+  operationId: "getStripeInvoices",
+  security: [{ bearerAuth: [] }],
+  response: {
+    200: StripeInvoicesSchema,
+  },
+};

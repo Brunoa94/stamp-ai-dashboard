@@ -1,6 +1,9 @@
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { FastifyInstance } from "fastify";
-import { getStripeBalanceSchema } from "./stripe.schema.js";
+import {
+  getStripeBalanceSchema,
+  getStripeInvoicesSchema,
+} from "./stripe.schema.js";
 import { StripeController } from "./stripe.controller.js";
 
 async function stripeProviderRoutes(fastify: FastifyInstance) {
@@ -10,6 +13,14 @@ async function stripeProviderRoutes(fastify: FastifyInstance) {
       "/",
       { schema: getStripeBalanceSchema },
       StripeController.getBalanceProvider,
+    );
+
+  fastify
+    .withTypeProvider<TypeBoxTypeProvider>()
+    .get(
+      "/invoices",
+      { schema: getStripeInvoicesSchema },
+      StripeController.getInvoicesProvider,
     );
 }
 

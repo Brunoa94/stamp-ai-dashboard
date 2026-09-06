@@ -14,4 +14,16 @@ async function getBalanceProvider(_: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-export const StripeController = { getBalanceProvider };
+async function getInvoicesProvider(_: FastifyRequest, reply: FastifyReply) {
+  try {
+    const invoices = await StripeService.getInvoices();
+
+    return reply.code(200).send(invoices);
+  } catch (e) {
+    const error = e as ErrorType;
+
+    return reply.code(error.status).send(error.error);
+  }
+}
+
+export const StripeController = { getBalanceProvider, getInvoicesProvider };

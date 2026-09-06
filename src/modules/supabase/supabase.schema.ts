@@ -41,6 +41,38 @@ export const OrderSchema = Type.Object({
 // Array schema for multiple orders
 export const OrdersArraySchema = Type.Array(OrderSchema);
 
+export const InvoiceSchema = Type.Object({
+  id: Type.String(),
+  invoice_number: Type.String(),
+  issued_at: Type.String(),
+  order_id: Type.String(),
+  order_number: Type.String(),
+  customer_email: Type.String(),
+  customer_name: Type.Union([Type.String(), Type.Null()]),
+  status: Type.String(),
+  type: Type.String(),
+  currency: Type.String(),
+  subtotal: Type.Number(),
+  shipping_cost: Type.Number(),
+  tax_amount: Type.Number(),
+  discount_amount: Type.Number(),
+  total_amount: Type.Number(),
+  payment_method: Type.Union([Type.String(), Type.Null()]),
+  payment_provider: Type.Union([Type.String(), Type.Null()]),
+  pdf_bucket: Type.Union([Type.String(), Type.Null()]),
+  pdf_path: Type.Union([Type.String(), Type.Null()]),
+  related_invoice_id: Type.Union([Type.String(), Type.Null()]),
+  user_id: Type.Union([Type.String(), Type.Null()]),
+  emailed_at: Type.Union([Type.String(), Type.Null()]),
+  created_at: Type.Union([Type.String(), Type.Null()]),
+  updated_at: Type.Union([Type.String(), Type.Null()]),
+  line_items: Type.Any(),
+  shipping_address: Type.Union([Type.Any(), Type.Null()]),
+  billing_address: Type.Union([Type.Any(), Type.Null()]),
+});
+
+export const InvoicesArraySchema = Type.Array(InvoiceSchema);
+
 export const GetFilteredOrdersQuerySchema = Type.Object({
   status: Type.Optional(Type.String()),
   payment_status: Type.Optional(Type.String()),
@@ -74,6 +106,43 @@ export type GetFilteredOrdersQueryType = Static<
   typeof GetFilteredOrdersQuerySchema
 >;
 
+export const GetFilteredInvoicesQuerySchema = Type.Object({
+  status: Type.Optional(Type.String()),
+  type: Type.Optional(Type.String()),
+  payment_provider: Type.Optional(Type.String()),
+  payment_method: Type.Optional(Type.String()),
+  customer_email: Type.Optional(Type.String()),
+  customer_name: Type.Optional(Type.String()),
+  invoice_number: Type.Optional(Type.String()),
+  order_number: Type.Optional(Type.String()),
+  order_id: Type.Optional(Type.String()),
+  user_id: Type.Optional(Type.String()),
+  issued_from: Type.Optional(Type.String({ format: "date-time" })),
+  issued_to: Type.Optional(Type.String({ format: "date-time" })),
+  created_from: Type.Optional(Type.String({ format: "date-time" })),
+  created_to: Type.Optional(Type.String({ format: "date-time" })),
+  min_total_amount: Type.Optional(Type.Number()),
+  max_total_amount: Type.Optional(Type.Number()),
+  limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 500 })),
+  offset: Type.Optional(Type.Integer({ minimum: 0 })),
+  sort_by: Type.Optional(
+    Type.Union([
+      Type.Literal("created_at"),
+      Type.Literal("updated_at"),
+      Type.Literal("issued_at"),
+      Type.Literal("total_amount"),
+      Type.Literal("invoice_number"),
+    ]),
+  ),
+  sort_order: Type.Optional(
+    Type.Union([Type.Literal("asc"), Type.Literal("desc")]),
+  ),
+});
+
+export type GetFilteredInvoicesQueryType = Static<
+  typeof GetFilteredInvoicesQuerySchema
+>;
+
 export const getAllOrdersSchema = {
   tags: ["Orders"],
   summary: "Get All Orders",
@@ -94,5 +163,28 @@ export const getOrdersByFiltersSchema = {
   querystring: GetFilteredOrdersQuerySchema,
   response: {
     200: OrdersArraySchema,
+  },
+};
+
+export const getAllInvoicesSchema = {
+  tags: ["Invoices"],
+  summary: "Get All Invoices",
+  description: "Returns all invoices in the database",
+  operationId: "getAllInvoices",
+  security: [{ bearerAuth: [] }],
+  response: {
+    200: InvoicesArraySchema,
+  },
+};
+
+export const getInvoicesByFiltersSchema = {
+  tags: ["Invoices"],
+  summary: "Get Invoices By Filters",
+  description: "Returns invoices filtered by optional query params",
+  operationId: "getInvoicesByFilters",
+  security: [{ bearerAuth: [] }],
+  querystring: GetFilteredInvoicesQuerySchema,
+  response: {
+    200: InvoicesArraySchema,
   },
 };
