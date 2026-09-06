@@ -20,7 +20,7 @@ import stripeProviderRoutes from "./modules/stripe/stripe.routes.js";
 import githubRoutes from "./modules/github/github.routes.js";
 import analyticsRoutes from "./modules/analytics/analytics.routes.js";
 import analyticsAgentRoutes from "./modules/analytics/analytics-agent.routes.js";
-import databaseProviderRoutes from "./modules/supabase/supabse.router.js";
+import databaseProviderRoutes from "./modules/supabase/supabase.router.js";
 
 export function buildApp() {
   const app = Fastify({

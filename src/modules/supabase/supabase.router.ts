@@ -1,6 +1,9 @@
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { FastifyInstance } from "fastify";
-import { getAllOrdersSchema } from "./supabase.schema.js";
+import {
+  getAllOrdersSchema,
+  getOrdersByFiltersSchema,
+} from "./supabase.schema.js";
 import { SupabaseController } from "./supabase.controller.js";
 
 async function databaseProviderRoutes(fastify: FastifyInstance) {
@@ -10,6 +13,14 @@ async function databaseProviderRoutes(fastify: FastifyInstance) {
       "/orders",
       { schema: getAllOrdersSchema },
       SupabaseController.getAllOrders,
+    );
+
+  fastify
+    .withTypeProvider<TypeBoxTypeProvider>()
+    .get(
+      "/orders/filtered",
+      { schema: getOrdersByFiltersSchema },
+      SupabaseController.getOrdersByFilters,
     );
 }
 

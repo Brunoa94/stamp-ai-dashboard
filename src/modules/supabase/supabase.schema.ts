@@ -1,4 +1,5 @@
 import { Type } from "@fastify/type-provider-typebox";
+import type { Static } from "@fastify/type-provider-typebox";
 
 // TypeBox schema matching the Supabase orders table
 export const OrderSchema = Type.Object({
@@ -40,12 +41,57 @@ export const OrderSchema = Type.Object({
 // Array schema for multiple orders
 export const OrdersArraySchema = Type.Array(OrderSchema);
 
+export const GetFilteredOrdersQuerySchema = Type.Object({
+  status: Type.Optional(Type.String()),
+  payment_status: Type.Optional(Type.String()),
+  payment_provider: Type.Optional(Type.String()),
+  payment_method: Type.Optional(Type.String()),
+  customer_email: Type.Optional(Type.String()),
+  customer_name: Type.Optional(Type.String()),
+  order_number: Type.Optional(Type.String()),
+  user_id: Type.Optional(Type.String()),
+  product_id: Type.Optional(Type.String()),
+  created_from: Type.Optional(Type.String({ format: "date-time" })),
+  created_to: Type.Optional(Type.String({ format: "date-time" })),
+  min_total_amount: Type.Optional(Type.Number()),
+  max_total_amount: Type.Optional(Type.Number()),
+  limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 500 })),
+  offset: Type.Optional(Type.Integer({ minimum: 0 })),
+  sort_by: Type.Optional(
+    Type.Union([
+      Type.Literal("created_at"),
+      Type.Literal("updated_at"),
+      Type.Literal("total_amount"),
+      Type.Literal("order_number"),
+    ]),
+  ),
+  sort_order: Type.Optional(
+    Type.Union([Type.Literal("asc"), Type.Literal("desc")]),
+  ),
+});
+
+export type GetFilteredOrdersQueryType = Static<
+  typeof GetFilteredOrdersQuerySchema
+>;
+
 export const getAllOrdersSchema = {
   tags: ["Orders"],
   summary: "Get All Orders",
   description: "Returns all orders in the database",
   operationId: "getAllOrders",
   security: [{ bearerAuth: [] }],
+  response: {
+    200: OrdersArraySchema,
+  },
+};
+
+export const getOrdersByFiltersSchema = {
+  tags: ["Orders"],
+  summary: "Get Orders By Filters",
+  description: "Returns orders filtered by optional query params",
+  operationId: "getOrdersByFilters",
+  security: [{ bearerAuth: [] }],
+  querystring: GetFilteredOrdersQuerySchema,
   response: {
     200: OrdersArraySchema,
   },
