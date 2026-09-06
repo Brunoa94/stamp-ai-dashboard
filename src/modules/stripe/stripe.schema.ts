@@ -73,3 +73,55 @@ export const getStripeInvoicesSchema = {
     200: StripeInvoicesSchema,
   },
 };
+
+const StripeTransactionSchema = Type.Object({
+  id: Type.String(),
+  object: Type.Literal("balance_transaction"),
+  amount: Type.Number(),
+  available_on: Type.Number(),
+  created: Type.Number(),
+  currency: Type.String(),
+  description: Type.Union([Type.String(), Type.Null()]),
+  fee: Type.Number(),
+  net: Type.Number(),
+  reporting_category: Type.String(),
+  source: Type.Union([Type.String(), Type.Null()]),
+  status: Type.String(),
+  type: Type.String(),
+});
+
+export const StripeTransactionsSchema = Type.Object({
+  object: Type.Literal("list"),
+  url: Type.String(),
+  has_more: Type.Boolean(),
+  data: Type.Array(StripeTransactionSchema),
+  updated_at: Type.String({ format: "date-time" }),
+});
+
+export const GetStripeTransactionsQuerySchema = Type.Object({
+  type: Type.Optional(Type.String()),
+  currency: Type.Optional(Type.String({ minLength: 3, maxLength: 3 })),
+  payout: Type.Optional(Type.String()),
+  source: Type.Optional(Type.String()),
+  status: Type.Optional(Type.String()),
+  reporting_category: Type.Optional(Type.String()),
+  description: Type.Optional(Type.String()),
+  created_from: Type.Optional(Type.Integer({ minimum: 0 })),
+  created_to: Type.Optional(Type.Integer({ minimum: 0 })),
+  available_on_from: Type.Optional(Type.Integer({ minimum: 0 })),
+  available_on_to: Type.Optional(Type.Integer({ minimum: 0 })),
+  limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })),
+});
+
+export const getStripeTransactionsSchema = {
+  tags: ["Stripe"],
+  summary: "Get Stripe transactions",
+  description:
+    "Returns Stripe balance transactions with optional server-side and local filters.",
+  operationId: "getStripeTransactions",
+  security: [{ bearerAuth: [] }],
+  querystring: GetStripeTransactionsQuerySchema,
+  response: {
+    200: StripeTransactionsSchema,
+  },
+};

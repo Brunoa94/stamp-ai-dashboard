@@ -2,6 +2,7 @@ import {
   StripeBalanceResponseType,
   StripeBalanceType,
   StripeInvoicesResponseType,
+  StripeTransactionsResponseType,
 } from "./stripe.types.js";
 import Stripe from "stripe";
 
@@ -36,4 +37,32 @@ const stripeInvoicesMapper = (
   })),
 });
 
-export const StripeMapper = { stripeBalanceMapper, stripeInvoicesMapper };
+const stripeTransactionsMapper = (
+  transactions: Stripe.BalanceTransaction[],
+): StripeTransactionsResponseType => ({
+  object: "list",
+  url: "/v1/balance_transactions",
+  has_more: false,
+  updated_at: new Date().toISOString(),
+  data: transactions.map((transaction) => ({
+    id: transaction.id,
+    object: "balance_transaction",
+    amount: transaction.amount,
+    available_on: transaction.available_on,
+    created: transaction.created,
+    currency: transaction.currency,
+    description: transaction.description ?? null,
+    fee: transaction.fee,
+    net: transaction.net,
+    reporting_category: transaction.reporting_category,
+    source: typeof transaction.source === "string" ? transaction.source : null,
+    status: transaction.status,
+    type: transaction.type,
+  })),
+});
+
+export const StripeMapper = {
+  stripeBalanceMapper,
+  stripeInvoicesMapper,
+  stripeTransactionsMapper,
+};

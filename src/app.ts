@@ -46,7 +46,7 @@ export function buildApp() {
   app.register(healthRoutes, { prefix: "/api/health" });
   app.register(invoiceRoutes, { prefix: "/api/invoices" });
   app.register(paymentProviderRoutes, { prefix: "/api/payment_providers" });
-  app.register(stripeProviderRoutes, { prefix: "(/api/stripe" });
+  app.register(stripeProviderRoutes, { prefix: "/api/stripe" });
   app.register(adminRoutes, { prefix: "/api/admins" });
   app.register(githubRoutes, { prefix: "/api/github" });
   app.register(analyticsRoutes, { prefix: "/api/analytics" });

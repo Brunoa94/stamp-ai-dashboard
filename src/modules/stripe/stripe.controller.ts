@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { StripeService } from "./stripe.service.js";
 import { ErrorType } from "../../shared/types/shared.js";
+import { GetStripeTransactionsQueryType } from "./stripe.types.js";
 
 async function getBalanceProvider(_: FastifyRequest, reply: FastifyReply) {
   try {
@@ -26,4 +27,23 @@ async function getInvoicesProvider(_: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-export const StripeController = { getBalanceProvider, getInvoicesProvider };
+async function getTransactionsProvider(
+  request: FastifyRequest<{ Querystring: GetStripeTransactionsQueryType }>,
+  reply: FastifyReply,
+) {
+  try {
+    const transactions = await StripeService.getTransactions(request.query);
+
+    return reply.code(200).send(transactions);
+  } catch (e) {
+    const error = e as ErrorType;
+
+    return reply.code(error.status).send(error.error);
+  }
+}
+
+export const StripeController = {
+  getBalanceProvider,
+  getInvoicesProvider,
+  getTransactionsProvider,
+};
